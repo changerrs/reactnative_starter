@@ -9,16 +9,25 @@ const COLOR_INCREMENT_NEGATIVE = -15;
 // action - how should we change our state object.
 const reducer = (state, action) => {
     //state === {red: number, green: number, blue: number}
-    //action === {colorToChange: 'red' || 'blue'  || 'green', amount: 15 || -15}
+    //action === {type: 'change_red' || 'change_blue'  || 'change_green', payload: 15 || -15}
 
-    switch (action.colorToChange) {
-        case "red":
+    switch (action.type) {
+        case "change_red":
             //never going to do state.red = state.red - 15; WE never modify state value directly.
-            return { ...state, red: state.red + action.amount };
-        case "green":
-            return { ...state, green: state.green + action.amount };
-        case "blue":
-            return { ...state, blue: state.blue + action.amount };
+            return state.red + action.payload > 255 ||
+                state.red + action.payload < 0
+                ? state
+                : { ...state, red: state.red + action.payload };
+        case "change_green":
+            return state.green + action.payload > 255 ||
+                state.green + action.payload < 0
+                ? state
+                : { ...state, green: state.green + action.payload };
+        case "change_blue":
+            return state.blue + action.payload > 255 ||
+                state.blue + action.payload < 0
+                ? state
+                : { ...state, blue: state.blue + action.payload };
         default:
             return state;
     }
@@ -40,14 +49,14 @@ const SquareScreen = ({ imageSource, title, score }) => {
                 color="Red"
                 onIncrease={() =>
                     dispatch({
-                        colorToChange: "red",
-                        amount: COLOR_INCREMENT,
+                        type: "change_red",
+                        payload: COLOR_INCREMENT,
                     })
                 }
                 onDecrease={() =>
                     dispatch({
-                        colorToChange: "red",
-                        amount: COLOR_INCREMENT_NEGATIVE,
+                        type: "change_red",
+                        payload: COLOR_INCREMENT_NEGATIVE,
                     })
                 }
             />
@@ -55,14 +64,14 @@ const SquareScreen = ({ imageSource, title, score }) => {
                 color="Blue"
                 onIncrease={() =>
                     dispatch({
-                        colorToChange: "blue",
-                        amount: COLOR_INCREMENT,
+                        type: "change_blue",
+                        payload: COLOR_INCREMENT,
                     })
                 }
                 onDecrease={() =>
                     dispatch({
-                        colorToChange: "blue",
-                        amount: COLOR_INCREMENT_NEGATIVE,
+                        type: "change_blue",
+                        payload: COLOR_INCREMENT_NEGATIVE,
                     })
                 }
             />
@@ -70,14 +79,14 @@ const SquareScreen = ({ imageSource, title, score }) => {
                 color="Green"
                 onIncrease={() =>
                     dispatch({
-                        colorToChange: "green",
-                        amount: COLOR_INCREMENT,
+                        type: "change_green",
+                        payload: COLOR_INCREMENT,
                     })
                 }
                 onDecrease={() =>
                     dispatch({
-                        colorToChange: "green",
-                        amount: COLOR_INCREMENT_NEGATIVE,
+                        type: "change_green",
+                        payload: COLOR_INCREMENT_NEGATIVE,
                     })
                 }
             />
